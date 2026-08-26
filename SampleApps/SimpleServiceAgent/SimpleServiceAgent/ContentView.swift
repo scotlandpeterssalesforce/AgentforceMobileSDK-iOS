@@ -2,9 +2,9 @@
 //  ContentView.swift
 //  SimpleServiceAgent
 //
-//  The single configuration screen: three persisted text fields plus the
-//  Launch Voice / Launch Chat buttons, which are enabled once all fields are
-//  filled in.
+//  The single configuration screen: three persisted text fields in a form,
+//  with standalone Launch Voice / Launch Chat buttons just below it. The
+//  buttons are enabled once all fields are filled in.
 //
 
 import SwiftUI
@@ -34,21 +34,9 @@ struct ContentView: View {
                     Text("These values are saved on this device and reused next time.")
                 }
 
-                Section {
-                    Button {
-                        launch = .voice
-                    } label: {
-                        Label("Launch Voice", systemImage: "waveform")
-                            .frame(maxWidth: .infinity)
-                    }
-                    Button {
-                        launch = .chat
-                    } label: {
-                        Label("Launch Chat", systemImage: "bubble.left.and.bubble.right")
-                            .frame(maxWidth: .infinity)
-                    }
-                }
-                .disabled(!settings.isComplete)
+                launchButtons
+                    .listRowInsets(EdgeInsets())
+                    .listRowBackground(Color.clear)
             }
             .navigationTitle("Simple Service Agent")
         }
@@ -58,6 +46,51 @@ struct ContentView: View {
                                 session: session,
                                 onClose: { launch = nil })
         }
+    }
+
+    private var launchButtons: some View {
+        // A fixed-width stack keeps both buttons the same size and hugs its own
+        // height. (A greedy GeometryReader here would force the list row to fill
+        // all remaining vertical space, so we deliberately avoid one.)
+        VStack(spacing: 12) {
+            LaunchButton(title: "Launch Voice",
+                         systemImage: "waveform") { launch = .voice }
+            LaunchButton(title: "Launch Chat",
+                         systemImage: "bubble.left.and.bubble.right") { launch = .chat }
+        }
+        .frame(width: 220)
+        .disabled(!settings.isComplete)
+        .frame(maxWidth: .infinity)
+        .padding(.top, 8)
+    }
+}
+
+/// A fixed-width launch button on a neutral gray background. The icon and text
+/// are colored explicitly by enabled state — blue icon / black text when
+/// enabled, both gray when disabled — so they stay legible on the fill.
+/// `maxWidth: .infinity` fills the width set by the surrounding stack so both
+/// buttons match.
+private struct LaunchButton: View {
+    @Environment(\.isEnabled) private var isEnabled
+    let title: String
+    let systemImage: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Label {
+                Text(title)
+                    .foregroundStyle(isEnabled ? Color.primary : .secondary)
+            } icon: {
+                Image(systemName: systemImage)
+                    .symbolRenderingMode(.monochrome)
+                    .foregroundStyle(isEnabled ? Color.blue : .secondary)
+            }
+            .frame(maxWidth: .infinity)
+        }
+        .buttonStyle(.bordered)
+        .controlSize(.large)
+        .tint(.gray)
     }
 }
 
