@@ -2,7 +2,7 @@
 //  AppSettings.swift
 //  SimpleServiceAgent
 //
-//  The three values that configure an Agentforce Service Agent. Each is
+//  The values that configure a guest-authenticated Agentforce session. Each is
 //  persisted to UserDefaults as it changes and restored on launch.
 //
 
@@ -12,40 +12,60 @@ import Observation
 @Observable
 final class AppSettings {
 
-    /// The Service API URL (SCRT2 messaging endpoint) for the deployment.
-    var serviceAPIURL: String {
-        didSet { defaults.set(serviceAPIURL, forKey: Keys.serviceAPIURL) }
+    /// The org's My Domain URL (e.g. `https://myorg.my.salesforce.com`). It
+    /// hosts the `/agentforce/bootstrap` guest endpoint that mints the access
+    /// token, and is passed to the SDK as both the guest credential URL and the
+    /// `forceConfigEndpoint`. Required.
+    var domainURL: String {
+        didSet { defaults.set(domainURL, forKey: Keys.domainURL) }
     }
 
-    /// The 15- or 18-character Salesforce Organization ID.
-    var organizationID: String {
-        didSet { defaults.set(organizationID, forKey: Keys.organizationID) }
+    /// The target Agent ID. Passed as the `agentid` query parameter and used to
+    /// start the conversation. Required.
+    var agentID: String {
+        didSet { defaults.set(agentID, forKey: Keys.agentID) }
     }
 
-    /// The Embedded Service deployment developer name (`esDeveloperName`).
-    var developerName: String {
-        didSet { defaults.set(developerName, forKey: Keys.developerName) }
+    /// The SFAP (Salesforce Agent Platform) base URL where API and voice calls
+    /// go. Defaults to `https://api.salesforce.com`. Required.
+    var sfapURL: String {
+        didSet { defaults.set(sfapURL, forKey: Keys.sfapURL) }
+    }
+
+    /// Optional tenant identifier for the connection. Leave blank if not needed.
+    var tenantID: String {
+        didSet { defaults.set(tenantID, forKey: Keys.tenantID) }
     }
 
     private let defaults: UserDefaults
 
+    /// The default SFAP endpoint used when the user has not entered one.
+    static let defaultSFAPURL = "https://api.salesforce.com"
+
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
-        self.serviceAPIURL = defaults.string(forKey: Keys.serviceAPIURL) ?? ""
-        self.organizationID = defaults.string(forKey: Keys.organizationID) ?? ""
-        self.developerName = defaults.string(forKey: Keys.developerName) ?? ""
+        self.domainURL = defaults.string(forKey: Keys.domainURL) ?? ""
+        self.agentID = defaults.string(forKey: Keys.agentID) ?? ""
+        // Seed the SFAP URL with the public default when nothing was saved yet
+        // (property observers don't run during init), so it is populated on
+        // first launch without waiting for an edit.
+        let savedSFAP = defaults.string(forKey: Keys.sfapURL) ?? ""
+        self.sfapURL = savedSFAP.isEmpty ? Self.defaultSFAPURL : savedSFAP
+        self.tenantID = defaults.string(forKey: Keys.tenantID) ?? ""
     }
 
-    /// True once all three values contain non-whitespace content, at which
-    /// point the Launch buttons become active.
+    /// True once the required values contain non-whitespace content, at which
+    /// point the Launch buttons become active. (`tenantID` is optional and does
+    /// not gate the buttons.)
     var isComplete: Bool {
-        [serviceAPIURL, organizationID, developerName].allSatisfy { !$0.trimmed.isEmpty }
+        [domainURL, agentID, sfapURL].allSatisfy { !$0.trimmed.isEmpty }
     }
 
     private enum Keys {
-        static let serviceAPIURL = "SimpleServiceAgent.serviceAPIURL"
-        static let organizationID = "SimpleServiceAgent.organizationID"
-        static let developerName = "SimpleServiceAgent.developerName"
+        static let domainURL = "SimpleServiceAgent.domainURL"
+        static let agentID = "SimpleServiceAgent.agentID"
+        static let sfapURL = "SimpleServiceAgent.sfapURL"
+        static let tenantID = "SimpleServiceAgent.tenantID"
     }
 }
 

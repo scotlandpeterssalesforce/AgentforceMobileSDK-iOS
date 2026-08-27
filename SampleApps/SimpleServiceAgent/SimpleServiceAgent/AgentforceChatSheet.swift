@@ -49,7 +49,7 @@ struct AgentforceChatSheet: View {
                 .foregroundStyle(.secondary)
             Text("Couldn’t start the Agentforce session.")
                 .font(.headline)
-            Text("Double-check the Service API URL, Organization ID, and Developer Name.")
+            Text("Double-check the Domain URL, Agent ID, and SFAP URL.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)

@@ -18,20 +18,24 @@ struct ContentView: View {
         NavigationStack {
             Form {
                 Section {
-                    LabeledField(title: "Service API URL",
-                                 prompt: "https://…",
-                                 text: $settings.serviceAPIURL,
+                    LabeledField(title: "Domain URL",
+                                 prompt: "https://myorg.my.salesforce.com",
+                                 text: $settings.domainURL,
                                  keyboard: .URL)
-                    LabeledField(title: "Organization ID",
-                                 prompt: "00Dxx0000000000",
-                                 text: $settings.organizationID)
-                    LabeledField(title: "Developer Name",
-                                 prompt: "Agent developer name",
-                                 text: $settings.developerName)
+                    LabeledField(title: "Agent ID",
+                                 prompt: "0Xxxx0000000000",
+                                 text: $settings.agentID)
+                    LabeledField(title: "SFAP URL",
+                                 prompt: AppSettings.defaultSFAPURL,
+                                 text: $settings.sfapURL,
+                                 keyboard: .URL)
+                    LabeledField(title: "Tenant ID (optional)",
+                                 prompt: "Leave blank if not needed",
+                                 text: $settings.tenantID)
                 } header: {
-                    Text("Agent Configuration")
+                    Text("Guest Configuration")
                 } footer: {
-                    Text("These values are saved on this device and reused next time.")
+                    Text("Saved on this device and reused next time. Domain URL, Agent ID, and SFAP URL are required. The Domain URL hosts the guest bootstrap endpoint; SFAP URL defaults to \(AppSettings.defaultSFAPURL).")
                 }
 
                 launchButtons
