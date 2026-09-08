@@ -207,7 +207,7 @@
 			mainGroup = 8930B92D2EB9640C0091E4CD;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				AF00000000000000000000A0 /* XCLocalSwiftPackageReference ".." */,
+				AF00000000000000000000A0 /* XCRemoteSwiftPackageReference "AgentforceMobileSDK-iOS" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8930B9372EB9640C0091E4CD /* Products */;
@@ -591,20 +591,26 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		AF00000000000000000000A0 /* XCLocalSwiftPackageReference "../.." */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../..;
+/* Begin XCRemoteSwiftPackageReference section */
+		AF00000000000000000000A0 /* XCRemoteSwiftPackageReference "AgentforceMobileSDK-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/salesforce/AgentforceMobileSDK-iOS.git";
+			requirement = {
+				kind = exactVersion;
+				version = 18.33.14;
+			};
 		};
-/* End XCLocalSwiftPackageReference section */
+/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		AF00000000000000000000A1 /* AgentforceSDK */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = AF00000000000000000000A0 /* XCRemoteSwiftPackageReference "AgentforceMobileSDK-iOS" */;
 			productName = AgentforceSDK;
 		};
 		AF00000000000000000000A2 /* AgentforceVoice */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = AF00000000000000000000A0 /* XCRemoteSwiftPackageReference "AgentforceMobileSDK-iOS" */;
 			productName = AgentforceVoice;
 		};
 /* End XCSwiftPackageProductDependency section */
