@@ -1,6 +1,15 @@
 {
-  "originHash" : "d8b948a37ae6f714bf6520a592df9cef9e1a8128db0659d306367c924c2b340d",
+  "originHash" : "4a42a4f67e0394bcf5680e7746f364f4afbfe0ada0434998e66629221d7d83f5",
   "pins" : [
+    {
+      "identity" : "agentforcemobilesdk-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/salesforce/AgentforceMobileSDK-iOS.git",
+      "state" : {
+        "revision" : "68ecc351c49705890fcf946cdd0ccb368db6b222",
+        "version" : "18.33.14"
+      }
+    },
     {
       "identity" : "mobilecustomizationframework-ios",
       "kind" : "remoteSourceControl",
@@ -42,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Salesforce-Async-Messaging/SMIClientCore-iOS.swift.git",
       "state" : {
-        "revision" : "7b1efe0c6547b38dde22fb2256f17a254219accb",
-        "version" : "1.12.0"
+        "revision" : "83a761169a3d79506edba4dee1299a531c921876",
+        "version" : "1.12.1"
       }
     },
     {
@@ -51,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sqlcipher/SQLCipher.swift.git",
       "state" : {
-        "revision" : "f879fffaaa3ad3541a77830daad4a28726dfa927",
-        "version" : "4.18.0"
+        "revision" : "39f212458aeb88e33bdac2200a793a3f0d55d32b",
+        "version" : "4.19.0"
       }
     }
   ],
