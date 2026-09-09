@@ -68,6 +68,23 @@ enum BrandTheme {
     private static let auraMatcha = Color(red: 0.42, green: 0.60, blue: 0.30)
     private static let auraSage = Color(red: 0.62, green: 0.76, blue: 0.48)
 
+    /// Pale matcha "container" fill for voice-mode surfaces that sit *behind* dark
+    /// forest content: the CC-toggle / muted-mic pill
+    /// (`voiceRoomCircleButtonSelectedBackground`, always drawn under the forest
+    /// `accent1` glyph) and, in light mode, the closed-captions transcript's user
+    /// bubble (`accentContainer1`, under near-black caption text). Mirrors the SDK's
+    /// very light *blue* default container (`#ECF5FE` / `#E9F5FF`), swapped to green
+    /// so the dark glyph/text stays legible on top.
+    private static let matchaContainer = Color(red: 0.878, green: 0.925, blue: 0.816)
+
+    /// Dark-mode caption bubble fill. In dark mode the caption text is near-white
+    /// (`onSurface1` default), so the user bubble needs a *deep* matcha — not the
+    /// pale `matchaContainer` — to keep that text legible. Mirrors the SDK's darker
+    /// blue dark-mode container default (`#0077D9`), swapped to green. Only used for
+    /// `accentContainer1` in dark mode; the CC pill stays pale in both modes because
+    /// its forest glyph never changes.
+    private static let matchaContainerDark = Color(red: 0.145, green: 0.278, blue: 0.176)
+
     /// Brand color overrides shared by both appearances. Any token left unspecified
     /// falls back to the SDK default.
     private static var brandColors: [AgentforceColorToken: Color] {
@@ -106,12 +123,39 @@ enum BrandTheme {
             // Voice-mode aura — the wavy particle field + halo behind the avatar.
             .auraColor1: auraMatcha,
             .auraColor2: auraSage,
+
+            // Voice-mode closed captions (CC). The CC-toggle glyph and the muted-mic
+            // glyph both render in `accent1` (forest), so their "selected" pill takes
+            // the *pale* `matchaContainer` in both modes — a dark glyph on a light
+            // pill — mirroring the SDK's light-blue default. (The circular-control ring
+            // and the caption user bubble are brand green too, but are set per-mode
+            // below: their contrast depends on the light vs. dark voice-room
+            // background.)
+            .voiceRoomCircleButtonSelectedBackground: matchaContainer,
         ]
     }
 
-    /// Color token overrides for light mode.
-    private static let lightColors: [AgentforceColorToken: Color] = brandColors
+    /// Color token overrides for light mode. On the light (white) voice-room
+    /// background, the circular controls (mic / close / CC-on) take a crisp `forest`
+    /// ring, and the closed-captions transcript's user bubble (`accentContainer1`),
+    /// which sits under near-black caption text, takes the pale `matchaContainer`.
+    private static var lightColors: [AgentforceColorToken: Color] {
+        var colors = brandColors
+        colors[.voiceRoomCircleButtonBorderColor] = forest
+        colors[.accentContainer1] = matchaContainer
+        return colors
+    }
 
-    /// Color token overrides for dark mode.
-    private static let darkColors: [AgentforceColorToken: Color] = brandColors
+    /// Color token overrides for dark mode. A dark `forest` ring would disappear on
+    /// the near-black (`#1F1F1F`) dark voice-room background, so the circular controls
+    /// take the lighter `auraSage` instead — the same light-matcha-on-dark reasoning
+    /// as the aura tints above. Likewise the caption user bubble takes the deeper
+    /// `matchaContainerDark` so the near-white caption text (`onSurface1` in dark
+    /// mode) stays legible on it.
+    private static var darkColors: [AgentforceColorToken: Color] {
+        var colors = brandColors
+        colors[.voiceRoomCircleButtonBorderColor] = auraSage
+        colors[.accentContainer1] = matchaContainerDark
+        return colors
+    }
 }
